@@ -1,9 +1,7 @@
-const admin = require('firebase-admin');
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } = require('../config/firebase');
+
 const errorHandler = require('../middlewares/errorHandler')
 
-const auth = getAuth();
-const db = admin.firestore(); 
+const {db, admin} = require('../config/firebase')
 
 class FirebaseAuthController {
     async registerUser(req, res) {
