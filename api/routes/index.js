@@ -7,8 +7,6 @@ const verifyToken = require('../middlewares/verifyToken')
 
 router.post('/register', firebaseAuthController.registerUser);
 router.post('/login', firebaseAuthController.loginUser);
-router.post('/logout', firebaseAuthController.logoutUser);
-router.post('/reset-password', firebaseAuthController.resetPassword);
 
 router.post('/submit-form', verifyToken, formController.submitForm);
 router.get('/form-submissions', verifyToken,firebaseAuthController.checkAdminRole, formController.getFormSubmissions);

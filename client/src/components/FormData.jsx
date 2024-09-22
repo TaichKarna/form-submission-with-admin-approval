@@ -18,11 +18,11 @@ export default function FormData(){
       setError(''); 
 
       try {
-          const response = await fetch('http://localhost:3000/api/submit-form', { 
+          const response = await fetch('/api/submit-form', { 
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${user.idToken}`
+                  'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
               },
               body: JSON.stringify(formData),
           });

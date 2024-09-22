@@ -5,13 +5,13 @@ export default function Profile(){
     const [submission, setSubmission] = useState(null);
     const { user } = useUserStore(state => state.user)
     const userData = useUserStore(state => state.user)
-
+    console.log(user)
     useEffect(() => {
         const getFormData = async() => {
-            const res = await fetch('http://localhost:3000/api/user-profile',{
+            const res = await fetch('/api/user-profile',{
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${user.idToken}`
+                    'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
             });
             const data = await res.json();

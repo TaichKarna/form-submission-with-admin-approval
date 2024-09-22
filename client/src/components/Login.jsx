@@ -2,6 +2,8 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from '../store/store'
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Login(){
     const [email, setEmail] = useState('');
@@ -16,7 +18,10 @@ export default function Login(){
         setError(''); 
 
         try {
-            const response = await fetch('http://localhost:3000/api/login', { 
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const { user } = userCredential;
+
+            const response = await fetch('/api/login', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,19 +29,20 @@ export default function Login(){
                 body: JSON.stringify({
                     email,
                     password,
+                    userId: user.uid
                 }),
             });
 
             const data = await response.json();
-
+            const {userRole} = data;
             if (response.ok) {
-                setSuccess('Signup successful! Please check your email for verification.');
-                setUser(data);
+                setUser({user, userRole})
+                console.log(userCredential,userRole)
                 navigate('/')
-            } else {
-                setError(data.error || 'Signup failed. Please try again.');
-            }
+            } 
+
         } catch (err) {
+            console.log(err)
             setError('An error occurred. Please try again.');
         }
     };

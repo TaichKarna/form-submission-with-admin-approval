@@ -7,11 +7,11 @@ function TableRow({formId,formData, status,setRender}){
     
     const approveForm = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/form-submission/${id}/approve`, {
+            const response = await fetch(`/api/form-submission/${id}/approve`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.idToken}` // Replace with actual JWT token
+                    'Authorization': `Bearer ${user.stsTokenManager.accessToken}` 
                 },
             });
 
@@ -30,11 +30,11 @@ function TableRow({formId,formData, status,setRender}){
 
     const rejectForm = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/form-submission/${id}/reject`, {
+            const response = await fetch(`/api/form-submission/${id}/reject`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.idToken}` // Replace with actual JWT token
+                    'Authorization': `Bearer ${user.stsTokenManager.accessToken}` 
                 },
             });
 

@@ -5,19 +5,18 @@ import { Link } from "react-router-dom";
 
 export default function DashBoard(){
     const [submissions, setSubmissions] = useState([]);
-    const { user } = useUserStore(state => state.user)
-
+    const { user } = useUserStore(state => state.user);
+    
     useEffect(() => {
         const getSubmissions = async() => {
             try{
-                const res = await fetch('http://localhost:3000/api/form-submissions',{
+                const res = await fetch('/api/form-submissions',{
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${user.idToken}`
+                        'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                     },
                 });
                 const data = await res.json();
-                console.log(data)
                 setSubmissions(data);
             }catch(error){
                 console.log(error);

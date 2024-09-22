@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } = require('../config/firebase');
+const errorHandler = require('../middlewares/errorHandler')
 
 const auth = getAuth();
 const db = admin.firestore(); 
@@ -16,37 +17,33 @@ class FirebaseAuthController {
         }
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const userId = userCredential.user.uid;
-
+            const userCredential = await admin.auth().createUser({email, password});
+            const userId = userCredential.uid;
             const userRole = role === 'admin' ? 'admin' : 'user';
             await db.collection('users').doc(userId).set({
                 email: email,
                 role: userRole
             });
 
-            await sendEmailVerification(auth.currentUser);
-            res.status(201).json({ message: "Verification email sent! User created successfully!" });
+            res.status(201).json({ message: "sign in successful" });
         } catch (error) {
             console.error('Error during user registration:', error);
-            res.status(500).json({ error: "An error occurred while registering user" });
+            res.status(500).json({ error: error });
         }
     }
 
     async loginUser(req, res) {
-        const { email, password } = req.body;
+        const { email, password, userId } = req.body;
 
-        if (!email || !password) {
+        if (!email || !password || !userId) {
             return res.status(422).json({
                 email: "Email is required",
                 password: "Password is required",
+                userId: "UserId is required"
             });
         }
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const idToken = userCredential._tokenResponse.idToken;
-            const userId = userCredential.user.uid;
 
             const userDoc = await db.collection('users').doc(userId).get();
             if (!userDoc.exists) {
@@ -54,14 +51,11 @@ class FirebaseAuthController {
             }
 
             const userRole = userDoc.data().role;
-            const user = userCredential._tokenResponse;
-
-            if (idToken) {
-                res.cookie('access_token', idToken, { httpOnly: true });
+            
+            if (userRole) {
                 res.status(200).json({
                     message: "User logged in successfully",
                     userRole,  
-                    user
                 });
             } else {
                 res.status(500).json({ error: "Internal Server Error" });
@@ -70,37 +64,6 @@ class FirebaseAuthController {
             console.error('Error during login:', error);
             res.status(500).json({ error: "An error occurred while logging in" });
         }
-    }
-
-    logoutUser(req, res) {
-        signOut(auth)
-        .then(() => {
-            res.clearCookie('access_token');
-            res.status(200).json({ message: "User logged out successfully" });
-        })
-        .catch((error) => {
-            console.error('Error during logout:', error);
-            res.status(500).json({ error: "Internal Server Error" });
-        });
-    }
-
-    resetPassword(req, res) {
-        const { email } = req.body;
-
-        if (!email) {
-            return res.status(422).json({
-                email: "Email is required"
-            });
-        }
-
-        sendPasswordResetEmail(auth, email)
-        .then(() => {
-            res.status(200).json({ message: "Password reset email sent successfully!" });
-        })
-        .catch((error) => {
-            console.error('Error during password reset:', error);
-            res.status(500).json({ error: "Internal Server Error" });
-        });
     }
 
     async checkAdminRole(req, res, next) {
