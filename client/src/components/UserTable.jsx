@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useUserStore from "../store/store";
 
-function TableRow({formId,formData, status}){
+function TableRow({formId,formData, status,setRender}){
     const [statusForm, setStatusForm] = useState(status);
     const { user } = useUserStore(state => state.user)
     
@@ -18,6 +18,7 @@ function TableRow({formId,formData, status}){
             if (response.ok) {
                 const data = await response.json();
                 setStatusForm("Approved");
+                window.location.reload()
                 console.log("Form approved successfully:", data);
             } else {
                 console.error("Failed to approve form submission");
@@ -33,13 +34,14 @@ function TableRow({formId,formData, status}){
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Replace with actual JWT token
+                    'Authorization': `Bearer ${user.idToken}` // Replace with actual JWT token
                 },
             });
 
             if (response.ok) {
                 const data = await response.json();
                 setStatusForm("Rejected")
+                window.location.reload()
                 console.log("Form rejected successfully:", data);
             } else {
                 console.error("Failed to reject form submission");
@@ -99,12 +101,17 @@ function TableRow({formId,formData, status}){
             </td>
             ): (
                 <td className="px-6 py-3 whitespace-nowrap">
-                <span className="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                    <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                    </svg>
-                    {statusForm}
-                </span>
+                {
+                    status === 'approved'? (
+                        <span className="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                        {statusForm}
+                    </span>
+                    ): (
+                        <span className="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-red-400">
+                        {statusForm}
+                    </span>
+                    )
+                }
             </td>
             )
         }
@@ -114,7 +121,9 @@ function TableRow({formId,formData, status}){
 }
 
 export default function UserTable({data}){
-    console.log(data)
+    const [render, setRender] = useState(Math.random());
+
+
     return (
         <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
             <div className="flex flex-col">
@@ -187,6 +196,7 @@ export default function UserTable({data}){
                                         formData={tr.formData} 
                                         status={tr.status} 
                                         key={tr.id}
+                                        setRender={setRender}
                                     />)}
                                 </tbody>
                             </table>

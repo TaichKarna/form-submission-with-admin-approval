@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import useUserStore from "../store/store";
 import UserTable from "./UserTable";
+import { Link } from "react-router-dom";
 
 export default function DashBoard(){
     const [submissions, setSubmissions] = useState([]);
@@ -61,9 +62,9 @@ export default function DashBoard(){
             dark:bg-neutral-800 dark:border-neutral-700" role="dialog" tabindex="-1" aria-label="Sidebar">
             <div class="relative flex flex-col h-full max-h-full">
                 <div class="px-6 pt-4">
-                <a class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80" href="#" aria-label="Preline">
+                <Link class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80" to={"/"} aria-label="Preline">
                     <h1 className="text-2xl">Form</h1>
-                </a>
+                </Link>
                 </div>
 
                 <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">

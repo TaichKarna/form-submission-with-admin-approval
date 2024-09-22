@@ -32,7 +32,7 @@ export default function Login(){
             if (response.ok) {
                 setSuccess('Signup successful! Please check your email for verification.');
                 setUser(data);
-                navigate('/home')
+                navigate('/')
             } else {
                 setError(data.error || 'Signup failed. Please try again.');
             }

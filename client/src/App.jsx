@@ -7,8 +7,8 @@ import useUserStore from "./store/store";
 
 function App() {
 
-  // const setUser = useUserStore(state => state.setUser)
-  // setUser(null);
+  const setUser = useUserStore(state => state.setUser)
+  setUser(null);
   return (
     <div className="w-full min-h-screen">
       <Navbar/>
