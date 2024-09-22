@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import { apiUlr } from "../App";
 export default function Signup(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
