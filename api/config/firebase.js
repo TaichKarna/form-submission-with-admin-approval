@@ -23,7 +23,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const serviceAccount = require("../FirebaseService.json");
+const serviceAccount = require("../../FirebaseService.json");
 const { getFirestore } = require("firebase-admin/firestore");
 
 admin.initializeApp({

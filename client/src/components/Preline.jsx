@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom';
+import {IStaticMethods} from 'preline/preline'
 
 const Preline = () => {
   const location = useLocation();
@@ -11,7 +12,7 @@ const Preline = () => {
 
   useEffect(() => {
     // @ts-ignore
-    HSStaticMethods.autoInit();
+    window.HSStaticMethods.autoInit();
   }, [location.pathname]);
 
   return <></>;
