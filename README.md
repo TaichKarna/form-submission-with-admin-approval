@@ -74,6 +74,25 @@ To get the necessary Firebase configuration values, follow these steps:
    - `messagingSenderId` (FIREBASE_MESSAGING_SENDER_ID)
    - `appId` (FIREBASE_APP_ID)
 
+## Running the Project
+
+To run the project, you need to start both the API and client applications. Follow these steps:
+
+1. **Navigate to the API Folder**:
+   Open your terminal and change to the API directory:
+
+   ```bash
+   cd api
+   npm run dev
+   ```
+2. **Navigate to Client Folder in a new terminal:**
+    Open a new terminal window and change to the client directory:
+
+   ```bash
+   cd client
+   npm run dev
+   ```
+
   
 
 
